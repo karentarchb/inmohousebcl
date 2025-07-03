@@ -1,0 +1,66 @@
+<mat-sidenav-container class="dashboard-container">
+
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    opened
+    class="sidenav"
+    (mouseenter)="expandSidenav()"
+    (mouseleave)="collapseSidenav()"
+    [class.expanded]="isSidenavExpanded()">
+
+    <div class="menu-container">
+      <h2 class="menu-title">
+        @if (isSidenavExpanded()) {
+          <span>InmoHouse</span>
+        } @else {
+          <span>IH</span>
+        }
+      </h2>
+
+      <mat-nav-list>
+        <a mat-list-item routerLink="visualizacion" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>visibility</mat-icon>
+          @if (isSidenavExpanded()) {
+            <span matListItemTitle>Ver Propiedades</span>
+          }
+        </a>
+        @if (user$ | async; as user) {
+          @if (user.role === 'agente' || user.role === ADMIN_ROLE_ID) {
+            <a mat-list-item routerLink="gestion" routerLinkActive="active-link">
+              <mat-icon matListItemIcon>edit_square</mat-icon>
+              @if (isSidenavExpanded()) {
+                <span matListItemTitle>Gestionar Propiedades</span>
+              }
+            </a>
+          }
+        }
+
+        @if (user$ | async; as user) {
+          @if (user.role === ADMIN_ROLE_ID) {
+            <mat-divider></mat-divider>
+            <a mat-list-item routerLink="admin-panel" routerLinkActive="active-link">
+              <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
+              @if (isSidenavExpanded()) {
+                <span matListItemTitle>Panel de Admin</span>
+              }
+            </a>
+          }
+        }
+      </mat-nav-list>
+    </div>
+
+    <div class="logout-container">
+       <button mat-flat-button color="warn" (click)="logout()">
+         <mat-icon>logout</mat-icon>
+         @if (isSidenavExpanded()) {
+           <span>Cerrar Sesión</span>
+         }
+       </button>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
